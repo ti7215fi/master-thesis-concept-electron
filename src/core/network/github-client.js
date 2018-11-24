@@ -1,7 +1,7 @@
+const { ipcRenderer } = require('electron');
+
 const HttpService = require('./http-service');
-const fileHandler = require('../file/file-handler');
-const path = require('path');
-const { ipcRenderer, app, remote } = require('electron');
+const utils = require('./../utils');
 
 class GitHubClient {
 
@@ -35,7 +35,7 @@ class GitHubClient {
                     const asset = assets[0];
                     ipcRenderer.send('download-release', {
                         url: asset.browser_download_url,
-                        dir: (app || remote.app).getPath('userData'),
+                        dir: utils.userDataPath,
                         fileName: asset.name,
                     });
                     ipcRenderer.once('download-release-success', (event, item) => resolve());

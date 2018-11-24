@@ -3,6 +3,7 @@ const fileHandler = require('./file/file-handler');
 const { app, remote } = require('electron');
 const gitHubClient = require('./network/github-client');
 const userState = require('./storage/user-state');
+const utils = require('./utils');
 
 class ReleaseManager {
 
@@ -24,7 +25,7 @@ class ReleaseManager {
 }
 
 function getSavePath() {
-    return (app || remote.app).getPath('userData');
+    return utils.userDataPath;
 }
 
 function isReleaseAvailable(releaseVersion) {

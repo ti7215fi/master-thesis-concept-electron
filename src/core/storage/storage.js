@@ -1,12 +1,12 @@
 const { app, remote } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const utils = require('./../utils');
 
 class Storage {
 
     constructor(options) {
-        const pathUserData = (app || remote.app).getPath('userData');
-        this.path = path.join(pathUserData, `${options.fileName}.json`);
+        this.path = path.join(utils.userDataPath, `${options.fileName}.json`);
         this.data = parseDataFile(this.path);
     }
 
