@@ -1,9 +1,13 @@
 'use strict';
-const fs = require('fs');
+
+const path = require('path');
+
 const releaseManager = require('./src/core/release-manager');
 const fileValidator = require('./src/core/file/file-validator');
+const fileHandler = require('./src/core/file/file-handler');
 const userState = require('./src/core/storage/user-state');
 const serverService = require('./src/core/network/server-service');
+const utils = require('./src/core/utils');
 
 class SelectServerForm {
 
@@ -67,12 +71,10 @@ class SelectServerForm {
                 if (!fileValidator.hasValidContent(content)) {
                     console.error('invalid content');
                 } else {
-                    fs.writeFile('servers.json', content, (error) => {
-                        if (error) {
-                            console.error(error);
-                        }
+                    const savePath = path.join(utils.userDataPath, 'servers.json');
+                    fileHandler.writeFile(savePath, content).then(() => {
                         console.log('successful import')
-                    });
+                    }, error => console.error(error));
                 }
             }
             reader.readAsText(file);
