@@ -3,25 +3,27 @@ const electronDl = require('electron-dl');
 const path = require("path");
 const isDev = require('electron-is-dev');
 const AppUpdater = require('./src/core/app-updater');
+const userState = require('./src/core/storage/user-state');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-// AppUpdater.checkForUpdates();
+AppUpdater.checkForUpdates();
+userState.clear();
 
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({ width: 800, height: 600 })
 
-  // and load the index.html of the app.
+  /* and load the index.html of the app.
   if (isDev) {
     win.loadFile('releases/develop/client/src/index.html');
   } else {
     win.loadFile('index.html');
-  }
+  }*/
 
-  // win.loadFile('index.html');
+  win.loadFile('index.html');
 
   // Open the DevTools.
   win.webContents.openDevTools()
@@ -31,7 +33,7 @@ function createWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    win = null
+    win = null;
   })
 }
 

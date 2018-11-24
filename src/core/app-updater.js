@@ -1,8 +1,13 @@
-const { remote, BrowserWindow } = require('electron');
+const { remote, BrowserWindow, app } = require('electron');
 const clientService = require('../client-service');
 const archiveHandler = require('../archive-handler');
 const clientManager = require('../client-manager');
 const stateHandler = require('./state/state-handler');
+const releaseManager = require('./release-manager');
+const request = require('request');
+const path = require('path');
+const fs = require('fs');
+const userState = require('./storage/user-state');
 
 class AppUpdater {
 
@@ -12,30 +17,16 @@ class AppUpdater {
 
     checkForUpdates() {
         setInterval(() => {
-            console.log('app updater');
-            const serverId = stateHandler.state.serverId;
-            if (serverId !== null) {
+            const serverId = userState.currentServerId;
+            if (serverId !== null && serverId !== undefined) {
                 const server = clientManager.getClientById(serverId);
-                const currentVersion = archiveHandler.getPackageJson(server.archiveName).version;
-                clientService.isUpdateAvailable(server.url, currentVersion).then((updateIsAvailable) => {
-                    if (updateIsAvailable) {
-                        clientService.downloadNewVersionMain(server, this.reloadWindow, this.printError);
+                request.get(`${server.url}/client-app/version`, (error, httpResponse, releaseVersion) => {
+                    if (!error) {
+                        releaseManager.loadRelease(releaseVersion);
                     }
-                }, error => console.error(error))
+                });
             }
         }, 3000);
-    }
-
-    printError(error) {
-        console.log(error);
-    }
-
-    reloadWindow(archiveName) {
-        if (process && process.type === 'renderer') {
-            remote.getCurrentWindow().reload();
-        } else {
-            BrowserWindow.getFocusedWindow().reload();
-        }
     }
 
 }

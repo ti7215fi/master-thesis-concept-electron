@@ -2,14 +2,17 @@
 const path = require('path');
 const request = require('request');
 const releaseManager = require('./src/core/release-manager');
+const fs = require('fs');
+const clientLoader = require('./src/client-loader');
+const serverManager =  require('./src/client-manager');
+const clientService = require('./src/client-service');
+const stateHandler = require(path.join(__dirname, 'src/core/state', 'state-handler.js'));
+const fileValidator = require('./src/file-validator');
+const userState = require('./src/core/storage/user-state');
 
 class SelectServerForm {
 
     constructor() {
-        this.clientLoader = require('./src/client-loader');
-        this.serverManager =  require('./src/client-manager');
-        this.clientService = require('./src/client-service');
-        this.stateHandler = require(path.join(__dirname, 'src/core/state', 'state-handler.js'));
         this.onInit();
     }
 
@@ -18,7 +21,7 @@ class SelectServerForm {
     }
 
     onInit() {
-        this.serverManager.servers.forEach((server) => {
+        serverManager.servers.forEach((server) => {
             let option = document.createElement('option');
             option.value = server.id;
             option.innerHTML = server.name;
@@ -40,14 +43,15 @@ class SelectServerForm {
 
     /*submit() {
         const id = this.selectBox.options[this.selectBox.selectedIndex].value;
-        const client = this.serverManager.getClientById(+id);
-        this.stateHandler.serverId = +id;
-        this.clientLoader.loadClient(client);
+        const client = serverManager.getClientById(+id);
+        stateHandler.serverId = +id;
+        clientLoader.loadClient(client);
     }*/
 
     submit() {
-        const id = this.selectBox.options[this.selectBox.selectedIndex].value;
-        const client = this.serverManager.getClientById(+id);
+        const id = +this.selectBox.options[this.selectBox.selectedIndex].value;
+        const client = serverManager.getClientById(id);
+        userState.currentServerId = id;
         request.get(`${client.url}/client-app/version`, (error, httpResponse, releaseVersion) => {
             releaseManager.loadRelease(releaseVersion);
         }, error => console.error(error));
@@ -56,8 +60,6 @@ class SelectServerForm {
     handleFileSelect(event) {
         const file = event.target.files[0];
         const reader = new FileReader();
-        const fs = require('fs');
-        const fileValidator = require('./src/file-validator');
         if (!fileValidator.hasValidExtension(file.path)) {
             document.getElementById('serverFile').value = '';
             console.error('wrong file extension');
