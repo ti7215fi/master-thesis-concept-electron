@@ -1,0 +1,14 @@
+[
+	{
+		"id": 0,
+		"url": "http://127.0.0.1:3000",
+		"name": "Demo-Server",
+		"archiveName": "demo-server"
+	},
+	{
+		"id": 1,
+		"url": "http://127.0.0.1:8080",
+		"name": "Live-Server",
+		"archiveName": "live-server"
+	}
+]

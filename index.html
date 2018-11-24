@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Hello World!</title>
+
+    </head>
+    <body>
+      <h1>Hello World!</h1>
+      We are using node <script>document.write(process.versions.node)</script>,
+      Chrome <script>document.write(process.versions.chrome)</script>,
+      and Electron <script>document.write(process.versions.electron)</script>.
+      <br>
+
+        <label for="serverFile">Wählen Sie die Server-Datei aus:</label>
+        <input type="file" id="serverFile" accept=".json"/>
+
+        <label for="serverSelectBox">Wählen Sie einen Server aus:</label>
+        <select id="serverSelectBox"></select>
+        <button type="button" onclick="selectServerForm.submit()" id="chooseServerButton">Auswählen</button>
+
+    </body>
+    <script type="text/javascript" src="./src/form.js"></script>
+
+  </html>
