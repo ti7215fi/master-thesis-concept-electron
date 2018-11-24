@@ -1,4 +1,3 @@
-const { app, remote } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const utils = require('./../utils');

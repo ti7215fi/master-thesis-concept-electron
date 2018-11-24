@@ -1,5 +1,3 @@
-const path = require('path');
-const fs = require('fs');
 const HttpService = require('./http-service');
 
 class Server {
@@ -31,7 +29,10 @@ class ServerService {
         });
     }
 
-    /*get servers() {
+    /**
+     * #1 Solution
+     
+    get servers() {
         return new Promise((resolve, reject) => {
             this.httpService.get('http://127.0.0.1:3000/client-app/server-list').then((response) => {
                 resolve(response.body);
@@ -39,6 +40,9 @@ class ServerService {
         });
     }*/
 
+    /**
+     * 2# Solution
+     */
     get servers() {
         return [
             new Server(0, 'http://127.0.0.1:3000', 'Demo-Server', 'demo-server'),
@@ -46,13 +50,16 @@ class ServerService {
         ];
     }
 
-    /*get servers() {
+    /**
+     * #3 Solution
+    
+    get servers() {
         const savePath = path.join(__dirname, '..', 'servers.json');
         if (fs.existsSync(savePath)) {
             return require(savePath);
         }
         return [];
-    }*/
+    } */
 
 }
 

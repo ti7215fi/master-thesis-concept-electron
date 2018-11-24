@@ -1,6 +1,7 @@
 const path = require('path');
+const remote = require('electron').remote;
+
 const fileHandler = require('./file/file-handler');
-const { app, remote } = require('electron');
 const gitHubClient = require('./network/github-client');
 const userState = require('./storage/user-state');
 const utils = require('./utils');
