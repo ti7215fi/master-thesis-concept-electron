@@ -1,5 +1,5 @@
 const HttpService = require('./http-service');
-const fileHandler = require('../file-handler');
+const fileHandler = require('../file/file-handler');
 const path = require('path');
 const ipcRenderer = require('electron').ipcRenderer;
 

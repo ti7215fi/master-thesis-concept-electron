@@ -6,7 +6,7 @@ const fs = require('fs');
 const clientLoader = require('./src/client-loader');
 const serverManager =  require('./src/client-manager');
 const clientService = require('./src/client-service');
-const fileValidator = require('./src/file-validator');
+const fileValidator = require('./src/core/file/file-validator');
 const userState = require('./src/core/storage/user-state');
 const serverService = require('./src/core/network/server-service');
 
