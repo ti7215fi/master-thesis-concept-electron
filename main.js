@@ -9,9 +9,6 @@ const userState = require('./src/core/storage/user-state');
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-AppUpdater.checkForUpdates();
-userState.clear();
-
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({ width: 800, height: 600 })
@@ -62,20 +59,8 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-ipcMain.on('download-client', (event, args) => {
-  electronDl.download(BrowserWindow.getFocusedWindow(), `${args.url}/client-app/download`, {
-    directory: isDev ? path.join(__dirname, 'clients') : path.join(__dirname, '..'),
-    filename: `${args.fileName}.asar`
-  }).then(downloadItem => {
-    event.sender.send('download-client-success', args.fileName);
-  }).catch((error) => {
-    event.sender.send('download-client-error', error);
-  });
-});
-
-ipcMain.on('update-is-available', (event, args) => {
-  
-});
+AppUpdater.checkForUpdates();
+userState.clear();
 
 ipcMain.on('download-release', (event, args) => {
   const options = {
