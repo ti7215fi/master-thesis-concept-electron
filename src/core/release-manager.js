@@ -1,7 +1,6 @@
 const path = require('path');
-const isDev = require('electron-is-dev');
 const fileHandler = require('./file/file-handler');
-const remote = require('electron').remote;
+const { app, remote } = require('electron');
 const gitHubClient = require('./network/github-client');
 const userState = require('./storage/user-state');
 
@@ -25,13 +24,7 @@ class ReleaseManager {
 }
 
 function getSavePath() {
-    let savePath = path.join(__dirname, '../..');
-    if (isDev) {
-        savePath = path.join(savePath, 'releases');
-    } else {
-        savePath = path.join(savePath, '..', 'releases');
-    }
-    return savePath;
+    return (app || remote.app).getPath('userData');
 }
 
 function isReleaseAvailable(releaseVersion) {
