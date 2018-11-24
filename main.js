@@ -15,8 +15,13 @@ function createWindow() {
   win = new BrowserWindow({ width: 800, height: 600 })
 
   // and load the index.html of the app.
-  win.loadFile('index.html');
-  // win.loadURL(`file://${__dirname}/../demoserver.asar/index.html`);
+  if (isDev) {
+    win.loadFile('releases/develop/client/src/index.html');
+  } else {
+    win.loadFile('index.html');
+  }
+
+  // win.loadFile('index.html');
 
   // Open the DevTools.
   win.webContents.openDevTools()
