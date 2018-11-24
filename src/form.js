@@ -9,6 +9,7 @@ const clientService = require('./src/client-service');
 const stateHandler = require(path.join(__dirname, 'src/core/state', 'state-handler.js'));
 const fileValidator = require('./src/file-validator');
 const userState = require('./src/core/storage/user-state');
+const serverService = require('./src/network/server-service');
 
 class SelectServerForm {
 
@@ -50,9 +51,9 @@ class SelectServerForm {
 
     submit() {
         const id = +this.selectBox.options[this.selectBox.selectedIndex].value;
-        const client = serverManager.getClientById(id);
+        const server = serverManager.getClientById(id);
         userState.currentServerId = id;
-        request.get(`${client.url}/client-app/version`, (error, httpResponse, releaseVersion) => {
+        serverService.getAppVersion(server.url).then((releaseVersion) => {
             releaseManager.loadRelease(releaseVersion);
         }, error => console.error(error));
     }

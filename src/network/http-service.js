@@ -3,11 +3,10 @@ const request = require('request');
 class HttpService {
 
     get url() {
-        const port = this.port ? `:${this.port}` : '';
-        return `${this.protocol}://${this.host}${port}`;
+        return `${this.protocol}://${this.host}${this.port}`;
     }
 
-    constructor(protocol, host, port = null) {
+    constructor(protocol = '', host = '', port = '') {
         this.protocol = protocol;
         this.host = host;
         this.port = port;
