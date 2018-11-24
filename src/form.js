@@ -6,10 +6,9 @@ const fs = require('fs');
 const clientLoader = require('./src/client-loader');
 const serverManager =  require('./src/client-manager');
 const clientService = require('./src/client-service');
-const stateHandler = require(path.join(__dirname, 'src/core/state', 'state-handler.js'));
 const fileValidator = require('./src/file-validator');
 const userState = require('./src/core/storage/user-state');
-const serverService = require('./src/network/server-service');
+const serverService = require('./src/core/network/server-service');
 
 class SelectServerForm {
 
@@ -45,7 +44,6 @@ class SelectServerForm {
     /*submit() {
         const id = this.selectBox.options[this.selectBox.selectedIndex].value;
         const client = serverManager.getClientById(+id);
-        stateHandler.serverId = +id;
         clientLoader.loadClient(client);
     }*/
 

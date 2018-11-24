@@ -1,7 +1,7 @@
 const clientManager = require('../client-manager');
 const releaseManager = require('./release-manager');
 const userState = require('./storage/user-state');
-const serverService = require('./../network/server-service');
+const serverService = require('./network/server-service');
 
 class AppUpdater {
 
