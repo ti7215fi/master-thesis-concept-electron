@@ -1,11 +1,6 @@
 'use strict';
-const path = require('path');
-const request = require('request');
-const releaseManager = require('./src/core/release-manager');
 const fs = require('fs');
-const clientLoader = require('./src/client-loader');
-const serverManager =  require('./src/client-manager');
-const clientService = require('./src/client-service');
+const releaseManager = require('./src/core/release-manager');
 const fileValidator = require('./src/core/file/file-validator');
 const userState = require('./src/core/storage/user-state');
 const serverService = require('./src/core/network/server-service');
@@ -20,8 +15,11 @@ class SelectServerForm {
         return document.getElementById('serverSelectBox');
     }
 
+    /**
+     * #2 Solution: Load server list from local file.
+     */
     onInit() {
-        serverManager.servers.forEach((server) => {
+        serverService.servers.forEach((server) => {
             let option = document.createElement('option');
             option.value = server.id;
             option.innerHTML = server.name;
@@ -30,8 +28,20 @@ class SelectServerForm {
         document.getElementById('serverFile').addEventListener('change', this.handleFileSelect);
     }
 
-    /*onInit() {
-        this.clientService.getServerList().then((servers) => {
+    submit() {
+        const id = +this.selectBox.options[this.selectBox.selectedIndex].value;
+        const server = serverService.getServerById(id);
+        userState.currentServerId = id;
+        serverService.getAppVersion(server.url).then((releaseVersion) => {
+            releaseManager.loadRelease(releaseVersion);
+        }, error => console.error(error));
+    }
+
+    /**
+     * #1 Solution: Load server list from server.
+     
+    onInit() {
+        serverService.servers().then((servers) => {
             servers.forEach((server) => {
                 let option = document.createElement('option');
                 option.value = server.id;
@@ -41,21 +51,10 @@ class SelectServerForm {
         }, (error) => console.error(error));
     }*/
 
-    /*submit() {
-        const id = this.selectBox.options[this.selectBox.selectedIndex].value;
-        const client = serverManager.getClientById(+id);
-        clientLoader.loadClient(client);
-    }*/
-
-    submit() {
-        const id = +this.selectBox.options[this.selectBox.selectedIndex].value;
-        const server = serverManager.getClientById(id);
-        userState.currentServerId = id;
-        serverService.getAppVersion(server.url).then((releaseVersion) => {
-            releaseManager.loadRelease(releaseVersion);
-        }, error => console.error(error));
-    }
-
+    /**
+     * @param {*} event 
+     * #3 Solution: Import server list from file.
+     */
     handleFileSelect(event) {
         const file = event.target.files[0];
         const reader = new FileReader();
