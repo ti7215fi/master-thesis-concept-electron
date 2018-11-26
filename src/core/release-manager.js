@@ -5,6 +5,7 @@ const fileHandler = require('./file/file-handler');
 const gitHubClient = require('./network/github-client');
 const userState = require('./storage/user-state');
 const utils = require('./utils');
+const AppUpdater = require('./app-updater');
 
 class ReleaseManager {
 
@@ -14,10 +15,10 @@ class ReleaseManager {
         if (releaseVersion !== userState.activeReleaseVersion) {
             isReleaseAvailable(releaseVersion).then((isAvailable) => {
                 if (isAvailable) {
-                    loadIndexHtmlToCurrentWindow(releaseVersion);
+                    load(releaseVersion);
                 } else {
                     gitHubClient.downloadReleaseByTag(`v${releaseVersion}`).then((item) => {
-                        loadIndexHtmlToCurrentWindow(releaseVersion);
+                        load(releaseVersion);
                     }, error => console.error(error));
                 }
             }, error => console.error(error));
@@ -43,9 +44,16 @@ function isReleaseAvailable(releaseVersion) {
     });
 }
 
-function loadIndexHtmlToCurrentWindow(releaseVersion) {
+/**
+ * #1 Save release version to current user state.
+ * #2 Start auto updater.
+ * #3 Load file to current window.
+ * @param {number} releaseVersion 
+ */
+function load(releaseVersion) {
     const filePath = path.join(getSavePath(), `${releaseVersion}.asar`, 'index.html');
     userState.activeReleaseVersion = releaseVersion;
+    AppUpdater.checkForUpdates();
     remote.getCurrentWindow().loadFile(filePath);
 }
 

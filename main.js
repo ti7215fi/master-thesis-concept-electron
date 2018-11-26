@@ -2,7 +2,6 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const electronDl = require('electron-dl');
 const path = require("path");
 const isDev = require('electron-is-dev');
-const AppUpdater = require('./src/core/app-updater');
 const userState = require('./src/core/storage/user-state');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -59,7 +58,6 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-AppUpdater.checkForUpdates();
 userState.clear();
 
 ipcMain.on('download-release', (event, args) => {
