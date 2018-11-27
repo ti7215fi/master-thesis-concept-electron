@@ -1,12 +1,12 @@
 const releaseManager = require('./release-manager');
 const userState = require('./storage/user-state');
 const serverService = require('./network/server-service');
-const CronJob = require('cron').CronJob;
+const ScheduledTask = require('./scheduled-task');
 
 class AppUpdater {
 
     constructor() {
-        this.job = new CronJob('0 */10 * * * *', this.onTick, this.onComplete);
+        this.job = new ScheduledTask('0 */10 * * * *', this.onTick);
     }
 
     onTick() {
@@ -17,10 +17,6 @@ class AppUpdater {
                 releaseManager.loadRelease(releaseVersion);
             }, error => console.error(error));
         }
-    }
-
-    onComplete() {
-        console.log('job complete');
     }
 
     checkForUpdates() {
